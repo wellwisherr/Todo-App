@@ -1,58 +1,64 @@
+// global variables 
+var todoArray = [];
+var todoInput = document.querySelector("#todoInput");
+var todoListAppend = document.querySelector('.todo-list');
 
 // Methods
 var todoControl = {
 
   todoAddButton: function () {
     document.querySelector(todoOptions.todoAddBtn).addEventListener("click", function(){
-      todoControl.addTodo();
+      var todoInput = document.querySelector(todoOptions.todoInputField);     
+    todoListAppend.innerHTML = "";
+      todoArray.push(todoInput.value);
+      todoControl.showTodoList();
     });
   },
 
-  addTodo : function () {
+  addTodo : function (value) {
 
-    var todoInput = document.querySelector(todoOptions.todoInputField);
     var todoDiv = document.createElement("div");
     todoDiv.classList.add("todo-div");
-
     createCheckBtn  = this.selectTodo(todoDiv);
-
-    createTodoItem  =  this.createTodoItem(todoDiv);
-
-    deleteTodo = this.createDeleteBtn(todoDiv);
-
-    // completeTodo = this.completeTodo(todoDiv);
-   
+    createTodoItem  =  this.createTodoItem(todoDiv, value);
+    deleteTodo = this.createDeleteBtn(todoDiv);   
     
-    todoDiv.appendChild(deleteTodo);   
-
-    // append the todo elements to the list
-    todoListAppend = document.querySelector(todoOptions.todoList);
-    todoListAppend.appendChild(todoDiv);
+    todoDiv.appendChild(deleteTodo); 
+    
     todoInput.value = "";
 
+    // append the todo elements to the list
+   
+    todoListAppend.appendChild(todoDiv);
+   
+
+  },
+  
+//   show todo list
+  showTodoList : function (){
+    console.log( todoListAppend);
+    todoArray.forEach(function(value){
+     todoControl.addTodo(value);
+    });
+     
   },
 
   // fucntion to create check button
   selectTodo : function(todo){
          // check button
-
          var selectTodoBtn = document.createElement("INPUT");
          selectTodoBtn.setAttribute("type", "checkbox");
-        //  var selectTodoBtn = document.createElement("button");
          selectTodoBtn.classList.add("complete-todo");
-        //   selectTodoBtn.innerHTML = '<i class="fa fa-circle-o"></i>'; 
+        
          todo.appendChild(selectTodoBtn);
-        //  selectTodoBtn.addEventListener("click", function(item){     
-        //   todoControl.completeTodo(item);
-        // });
   },
 
 
   // function to create list item element li
-  createTodoItem :  function (todoDiv){
+  createTodoItem :  function (todoDiv, value){
     var todoListItem = document.createElement('li');    
     todoListItem.classList.add("todo-item");
-    todoListItem.innerText = todoInput.value;    
+    todoListItem.innerText = value;    
     todoDiv.appendChild(todoListItem);
     return todoListItem;
   },
@@ -76,20 +82,8 @@ var todoControl = {
     todoItem = todoElement.parentElement;
     console.log(todoItem);
     todoItem.remove();
+    todoArray.pop(todoInput.value);
   },
-  
-
- completeTodo :  function (item){
-
-   item = item.children[0];
-  // console.log(item);
-   if(item.classList == "complete-todo") {
-
-      item.classList.remove("complete-todo");
-      item.classList.add("completed-todo");
-
-   }
- }  
 
 
 };
