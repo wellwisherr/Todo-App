@@ -7,16 +7,25 @@ var todoListAppend = document.querySelector('.todo-list');
 var todoControl = {
 
   todoAddButton: function () {
-    document.querySelector(todoOptions.todoAddBtn).addEventListener("click", function(){
-      var todoInput = document.querySelector(todoOptions.todoInputField);     
+    var todoInput = document.querySelector(todoOptions.todoInputField);  
+    document.querySelector(todoOptions.todoAddBtn).addEventListener("click", function(){      
+     
     todoListAppend.innerHTML = "";
       todoArray.push(todoInput.value);
       todoControl.showTodoList();
+      
     });
+
+    todoInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault(); 
+      document.querySelector(todoOptions.todoAddBtn).click();
+    }
+  });
   },
 
   addTodo : function (value) {
-
+    
     var todoDiv = document.createElement("div");
     todoDiv.classList.add("todo-div");
     createCheckBtn  = this.selectTodo(todoDiv);
@@ -38,7 +47,9 @@ var todoControl = {
   showTodoList : function (){
     console.log( todoListAppend);
     todoArray.forEach(function(value){
-     todoControl.addTodo(value);
+      if(value){
+        todoControl.addTodo(value);
+      }
     });
      
   },
@@ -56,16 +67,20 @@ var todoControl = {
 
   // function to create list item element li
   createTodoItem :  function (todoDiv, value){
+
+  
     var todoListItem = document.createElement('li');    
     todoListItem.classList.add("todo-item");
     todoListItem.innerText = value;    
+
     todoDiv.appendChild(todoListItem);
     return todoListItem;
+    
   },
 
     // function to create delete button 
  createDeleteBtn :  function (item){
-
+  
   deleteTodo =  document.createElement("button");
   deleteTodo.classList.add("delete-btn");
   deleteTodo.innerHTML = '<i class="fa fa-trash-o"></i>'; 
@@ -80,7 +95,6 @@ var todoControl = {
     item = item.target;   
     todoElement =  item.parentElement;
     todoItem = todoElement.parentElement;
-    console.log(todoItem);
     todoItem.remove();
     todoArray.pop(todoInput.value);
   },
